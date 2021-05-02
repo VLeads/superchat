@@ -37,6 +37,11 @@ const [user] = useAuthState(auth);
 
   return (
     <div className="App">
+      <header>
+        <h1>SuperChat</h1>
+        <h3>(built in ⚛️ + 🔥)</h3>
+        <SignOut />
+      </header>
       <section>
         {/* if userloogedIn show ChatRoom component otherwise SignIn component */}
         {user ? <ChatRoom /> : <SignIn />}
@@ -56,7 +61,7 @@ function SignIn() {
   }
 
   return (
-    <button onClick={signInWithGoogle}>Sign in with Google</button>
+    <button className="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>
   )
 }
  
@@ -64,7 +69,7 @@ function SignIn() {
 function SignOut() {
   return auth.currentUser && (
     //signout method used for signing user out
-    <button onClick={() => auth.signOut()}>Sign Out</button>
+    <button className="sign-out" onClick={() => auth.signOut()}>Sign Out</button>
   )
 }
 
@@ -111,18 +116,19 @@ function ChatRoom() {
 
   return (
     <>
+
       <main>
         {/* if there are msgs it will map the msgs. And for each msg it will have chatmessage component  */}
         {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
 
-        <div ref={dummy}></div>
+        <span ref={dummy}></span>
 
       </main>
 
       {/* sendMessage will write value to firestore */}
     <form onSubmit={sendMessage}>
       <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
-      <button type="submit">🚀</button>
+      <button type="submit" disabled={!formValue}>🚀</button>
     </form>
 
     </>
@@ -135,12 +141,12 @@ function ChatMessage(props) {
   //checking sender & receiver of the msg, if firestore id is equal to id of the user that is logged in, then current user sent the msg
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
-  return (
+  return (<>
     <div className={`message ${messageClass}`}>
       <img src={photoURL} alt="user" />
       <p>{text}</p>
     </div>
-  )
+  </>)
   
 }
 
