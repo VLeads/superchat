@@ -1,4 +1,4 @@
-body {
+/* body {
   background-color: #282c34;
 }
 
@@ -83,7 +83,7 @@ input {
 }
 
 button {
-  background-color: #282c34; /* Green */
+  background-color: #282c34; 
   border: none;
   color: white;
   padding: 15px 32px;
@@ -151,4 +151,4 @@ img {
   height: 40px;
   border-radius: 50%;
   margin: 2px 5px;
-}
+} */
