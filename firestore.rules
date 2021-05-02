@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    match /messages/{docId} {
+    // it means allow read if user is signedIn
+    allow read: if request.auth.uid != null;
+    allow create: if canCreateMessage();
+    }
+    
+    function canCreateMessage() {
+    let isSignedIn = request.auth.uid != null;
+    
+    // checking, every signedIn user have different doc, so only owner can change that
+    let isOwner = request.auth.uid == request.resource.data.uid;
+  
+    //if your userID is in it, then you can't write
+    let isNotBanned = exists(
+     /databases/$(database)/documents/banned/$(request.auth.uid)) == false;
+    
+    	return isSignedIn && isOwner && isNotBanned;
+    }
+    
+  }
+}
